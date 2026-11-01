@@ -62,7 +62,7 @@ export function VehicleForm({ onSubmit, busy, initial }: { onSubmit: (v: Vehicle
       <label className="flex flex-col gap-1.5 text-xs font-medium uppercase tracking-eyebrow text-fg-subtle">
         Make
         <select value={make} onChange={(e) => { setMake(e.target.value); setModel(""); }} className={cn(field, !make && "text-fg-subtle")} required>
-          <option value="">Select make</option>
+          <option value="">Make</option>
           {makes.map((m) => <option key={m.value} value={m.value}>{m.label}</option>)}
         </select>
       </label>
@@ -72,7 +72,7 @@ export function VehicleForm({ onSubmit, busy, initial }: { onSubmit: (v: Vehicle
           list="ferion-models"
           value={model}
           onChange={(e) => setModel(e.target.value)}
-          placeholder={make ? "Type or pick a model" : "Pick a make first"}
+          placeholder="Model"
           disabled={!make}
           className={field}
           required
@@ -82,7 +82,7 @@ export function VehicleForm({ onSubmit, busy, initial }: { onSubmit: (v: Vehicle
         </datalist>
       </label>
       <Button type="submit" variant="accent" disabled={busy || !make || !model.trim()} className="sm:w-auto">
-        {busy ? "Valuing…" : "Value vehicle"}
+        {busy ? "Running…" : "Value"}
       </Button>
     </form>
   );

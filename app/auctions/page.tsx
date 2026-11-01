@@ -8,12 +8,8 @@ export const metadata: Metadata = { title: "Auction Analysis" };
 export default function AuctionsPage() {
   return (
     <>
-      <PageHeader
-        eyebrow="Auctions"
-        title="Auction Analysis"
-        description="Upload a Copart or IAA sale list. Ferion resolves make codes, expands part-compatible model years, and values every lot for scrap and resellable parts."
-      />
-      <Container className="py-8 sm:py-10">
+      <PageHeader title="Auction Analysis" />
+      <Container className="py-6">
         <BulkValuation />
       </Container>
     </>

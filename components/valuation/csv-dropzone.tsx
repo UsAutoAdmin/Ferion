@@ -63,8 +63,8 @@ export function CsvDropzone({ onReady, busy }: { onReady: (parsed: ParsedCsv, fi
           drag ? "border-accent/60 bg-accent/5" : "border-line/20 hover:border-line/40"
         )}
       >
-        <span className="text-sm text-fg">Drop a Copart / IAA sale list or any CSV with Year, Make, Model</span>
-        <span className="text-xs text-fg-subtle">Lot / stock numbers and VINs are carried through when present · up to {BULK_LIMIT} vehicles</span>
+        <span className="text-sm text-fg">Drop CSV or click to select</span>
+        <span className="text-xs text-fg-subtle">Columns: Year, Make, Model (Lot, VIN optional) · max {BULK_LIMIT} rows</span>
         <input ref={inputRef} type="file" accept=".csv,text/csv" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; if (f) handleFile(f); e.target.value = ""; }} />
       </div>
 
@@ -79,7 +79,7 @@ export function CsvDropzone({ onReady, busy }: { onReady: (parsed: ParsedCsv, fi
               {parsed.skipped.length ? <span className="text-fg-subtle"> · {parsed.skipped.length} row{parsed.skipped.length === 1 ? "" : "s"} skipped</span> : null}
             </div>
             <Button variant="accent" size="md" disabled={busy || count === 0 || overLimit} onClick={() => onReady(parsed, fileName)}>
-              {busy ? "Valuing…" : `Value ${count} vehicle${count === 1 ? "" : "s"}`}
+              {busy ? "Running…" : `Value ${count}`}
             </Button>
           </div>
           <div className="flex flex-wrap gap-1.5 text-xs">
@@ -89,7 +89,7 @@ export function CsvDropzone({ onReady, busy }: { onReady: (parsed: ParsedCsv, fi
             {parsed.headerMap.unmapped.slice(0, 6).map((h) => <Badge key={h} tone="neutral">{h}</Badge>)}
             {parsed.headerMap.unmapped.length > 6 ? <Badge tone="neutral">+{parsed.headerMap.unmapped.length - 6} more</Badge> : null}
           </div>
-          {overLimit ? <p className="text-xs text-accent-rust">Split the file: at most {BULK_LIMIT} vehicles per upload.</p> : null}
+          {overLimit ? <p className="text-xs text-accent-rust">Over {BULK_LIMIT}-row limit.</p> : null}
           {parsed.skipped.length ? (
             <details className="text-xs text-fg-subtle">
               <summary className="cursor-pointer">Skipped rows</summary>

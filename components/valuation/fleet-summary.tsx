@@ -18,9 +18,8 @@ export function FleetSummaryView({ summary: s }: { summary: FleetSummary }) {
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
         <Card>
-          <CardTitle>Where the parts value is</CardTitle>
-          <p className="mb-4 mt-1 text-sm text-fg-muted">Part types ranked by expected value across the whole list.</p>
-          <ul className="flex flex-col gap-2.5">
+          <CardTitle>Part types by expected value</CardTitle>
+          <ul className="mt-4 flex flex-col gap-2.5">
             {s.topTypes.map((t) => (
               <li key={t.typeKey} className="grid grid-cols-[1fr_auto] items-center gap-3 text-sm">
                 <div>
@@ -35,7 +34,7 @@ export function FleetSummaryView({ summary: s }: { summary: FleetSummary }) {
                 <span className="w-20 text-right tabular-nums text-fg">{formatCurrency(t.expectedValue)}</span>
               </li>
             ))}
-            {s.topTypes.length === 0 ? <li className="text-sm text-fg-subtle">No priced parts.</li> : null}
+            {s.topTypes.length === 0 ? <li className="text-sm text-fg-subtle">—</li> : null}
           </ul>
         </Card>
 

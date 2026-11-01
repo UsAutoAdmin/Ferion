@@ -43,7 +43,7 @@ export function BulkValuation() {
   }
 
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-6">
       <Card>
         <CsvDropzone onReady={run} busy={busy} />
         {error ? <p className="mt-3 text-sm text-accent-rust">{error}</p> : null}
@@ -55,8 +55,8 @@ export function BulkValuation() {
           <div className="flex flex-wrap items-center justify-between gap-3">
             <h2 className="text-xl font-medium tracking-tight text-fg">Summary</h2>
             <div className="flex gap-2">
-              <Button variant="secondary" size="sm" onClick={() => download(`${fileName}-vehicles.csv`, vehiclesCsv(results))}>Export vehicles CSV</Button>
-              <Button variant="secondary" size="sm" onClick={() => download(`${fileName}-parts.csv`, partsCsv(results))}>Export pull list CSV</Button>
+              <Button variant="secondary" size="sm" onClick={() => download(`${fileName}-vehicles.csv`, vehiclesCsv(results))}>Vehicles CSV</Button>
+              <Button variant="secondary" size="sm" onClick={() => download(`${fileName}-parts.csv`, partsCsv(results))}>Parts CSV</Button>
             </div>
           </div>
           <FleetSummaryView summary={summary} />

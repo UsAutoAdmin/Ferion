@@ -27,21 +27,12 @@ export function SingleValuation() {
   }
 
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-6">
       <Card>
         <VehicleForm onSubmit={run} busy={busy} />
         {error ? <p className="mt-3 text-sm text-accent-rust">{error}</p> : null}
       </Card>
-      {result ? <ValuationReport valuation={result} /> : <EmptyState />}
-    </div>
-  );
-}
-
-function EmptyState() {
-  return (
-    <div className="rounded-brand-lg border border-dashed border-line/15 p-10 text-center">
-      <p className="text-sm text-fg-muted">Pick a year, make and model to see scrap value and the resellable parts worth pulling.</p>
-      <p className="mt-2 text-xs text-fg-subtle">Prices and sell-through come from the Content Machine catalog; weights from the vehicle profile.</p>
+      {result ? <ValuationReport valuation={result} /> : null}
     </div>
   );
 }

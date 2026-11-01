@@ -8,12 +8,8 @@ export const metadata: Metadata = { title: "Vehicle Value" };
 export default function ValuePage() {
   return (
     <>
-      <PageHeader
-        eyebrow="Vehicle Value"
-        title="What is this car worth, pulled apart?"
-        description="Scrap metal by material plus the resellable eBay parts a yard should pull — radios, bezels, consoles, modules, lights — priced from catalog sell-through."
-      />
-      <Container className="py-8 sm:py-10">
+      <PageHeader title="Vehicle Value" />
+      <Container className="py-6">
         <SingleValuation />
       </Container>
     </>
