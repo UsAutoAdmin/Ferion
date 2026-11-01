@@ -1,0 +1,88 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Ferion palette — derived from Atoms (atoms.co).
+ *
+ * Values are space-separated RGB channels so Tailwind can apply opacity
+ * modifiers (`bg-accent/10`). Hex equivalents are in the comments and in
+ * BRAND.md.
+ */
+:root {
+  /* Typography — Switzer is loaded from Fontshare in app/layout.tsx */
+  --font-sans: "Switzer", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  /* Surfaces */
+  --surface: 0 0 0;            /* #000000 — page background */
+  --surface-raised: 12 12 12;  /* #0C0C0C — cards */
+  --surface-overlay: 20 20 20; /* #141414 — modals, dropdowns */
+
+  /* Type (warm cream, not white) */
+  --fg: 255 247 221;           /* #FFF7DD — headings, primary text (use at 90%) */
+  --fg-muted: 200 190 168;     /* #C8BEA8 — body copy */
+  --fg-subtle: 138 138 138;    /* #8A8A8A — captions, helper text */
+
+  /* Brand accents */
+  --accent: 200 173 134;       /* #C8AD86 — sand: primary accent, highlight text */
+  --accent-hover: 215 190 152; /* #D7BE98 — hover of accent elements */
+  --accent-deep: 149 121 81;   /* #957951 — bronze: borders, muted accents */
+  --accent-bright: 232 168 95; /* #E8A85F — copper: emphasis, stats, warnings */
+  --accent-rust: 158 91 58;    /* #9E5B3A — rust: negative / destructive */
+
+  /* Secondary / data-viz */
+  --teal: 110 143 141;         /* #6E8F8D */
+  --slate: 63 88 117;          /* #3F5875 */
+  --sage: 90 122 79;           /* #5A7A4F */
+  --olive: 140 137 118;        /* #8C8976 */
+  --taupe: 175 152 136;        /* #AF9888 */
+
+  /* Hairlines */
+  --line: 255 255 255;         /* used at ~11% → rgba(255,255,255,0.11) */
+  --line-strong: 200 173 134;  /* accent hairline for focus / active */
+
+  /* Status */
+  --success: 90 122 79;        /* sage */
+  --warning: 232 168 95;       /* copper */
+  --danger: 158 91 58;         /* rust */
+}
+
+@layer base {
+  html {
+    color-scheme: dark;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply bg-surface font-sans text-fg/90;
+    font-weight: 400;
+  }
+
+  ::selection {
+    @apply bg-accent/30 text-fg;
+  }
+
+  a,
+  button,
+  [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  :focus-visible {
+    @apply outline-none ring-2 ring-accent/60 ring-offset-2 ring-offset-surface;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Hairline border used for cards and dividers — matches Atoms' 11% white. */
+  .border-hairline {
+    border-color: rgb(var(--line) / 0.11);
+  }
+}
