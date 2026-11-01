@@ -28,6 +28,36 @@ export interface MarketObservation {
 
 export type MatchTier = "exact" | "generation" | "nearby";
 
+/** Client-safe summary of a live eBay check for one part type. */
+export interface LivePartMarket {
+  query: string;
+  searchUrl: string;
+  resultCount: number | null;
+  soldN: number;
+  activeN: number;
+  /** sold / (sold + active); null when sold search was unavailable. */
+  sellThrough: number | null;
+  soldAvailable: boolean;
+  price: number | null;
+  priceBasis: "sold" | "asking" | "none";
+  askingMedian: number | null;
+  relevance: number | null;
+  evidence: Array<{ itemId: string; title: string; price: number | null; url: string; source: "sold" | "active" }>;
+  checkedAt: string;
+}
+
+export interface VerificationSummary {
+  /** Part types sent to eBay. */
+  requested: number;
+  /** Checks that returned a page. */
+  checked: number;
+  /** Checks that produced a usable price. */
+  priced: number;
+  soldSearchAvailable: boolean;
+  durationMs: number;
+  errors: string[];
+}
+
 export interface PartValuation {
   typeKey: string;
   label: string;
@@ -53,6 +83,8 @@ export interface PartValuation {
   exclusiveGroup: string | null;
   /** False for the lesser members of an exclusive group. */
   countedInTotal: boolean;
+  /** Present when this type was checked live on eBay. */
+  live?: LivePartMarket | null;
 }
 
 export interface PartsValuation {
@@ -126,4 +158,6 @@ export interface VehicleValuation {
   /** scrap.totalValueUsd + parts.grossValue */
   totalGrossUsd: number;
   warnings: string[];
+  /** Present after a live eBay verification pass. */
+  verification?: VerificationSummary;
 }

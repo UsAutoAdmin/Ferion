@@ -72,7 +72,8 @@ const NOISE_TOKENS = new Set([
   "EXL", "SEL", "LE", "XLE", "XLT", "XL", "LT", "LS", "LTZ", "SLT", "SLE", "SR5", "TRD", "LARIAT",
   "PLATINUM", "DENALI", "LAREDO", "SAHARA", "RUBICON", "HYBRID", "PLUG", "IN", "TURBO", "DIESEL", "V6", "V8",
   "L4", "I4", "HD", "SD", "SUPER", "DUTY", "NEW", "SPORTBACK", "SI", "SL", "SR", "PRO", "ST", "RS", "SS", "Z71", "RST",
-  "TRAIL", "BOSS", "KING", "RANCH", "TREMOR", "RAPTOR",
+  "TRAIL", "BOSS", "KING", "RANCH", "TREMOR", "RAPTOR", "BIG", "HORN", "LONE", "STAR", "LARAMIE", "TRADESMAN",
+  "REBEL", "OVERLAND", "SUMMIT", "ALTITUDE", "NIGHT", "EDITION", "TEXAS", "SPORT", "SE", "S", "GT", "TYPE",
 ]);
 
 /**

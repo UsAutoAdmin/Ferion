@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { CsvDropzone } from "@/components/valuation/csv-dropzone";
@@ -24,6 +24,11 @@ export function BulkValuation() {
   const [results, setResults] = useState<VehicleValuation[] | null>(null);
   const [fileName, setFileName] = useState("upload");
   const [rejected, setRejected] = useState<Array<{ index: number; error: string }>>([]);
+  const [liveAvailable, setLiveAvailable] = useState(false);
+
+  useEffect(() => {
+    fetch("/api/value/verify").then((r) => r.json()).then((d) => setLiveAvailable(Boolean(d.available))).catch(() => {});
+  }, []);
 
   const summary = useMemo(() => (results ? summarizeFleet(results) : null), [results]);
 
@@ -60,7 +65,7 @@ export function BulkValuation() {
             </div>
           </div>
           <FleetSummaryView summary={summary} />
-          <VehicleResultsTable results={results} />
+          <VehicleResultsTable results={results} liveAvailable={liveAvailable} />
         </>
       ) : null}
     </div>

@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { Badge } from "@/components/ui/badge";
+import { LiveEvidenceRow, LiveMarketCell } from "@/components/valuation/live-market-cell";
 import { TierBadge } from "@/components/valuation/tier-badge";
 import { PART_CATEGORIES } from "@/lib/catalog/part-types";
 import { cn } from "@/lib/utils/cn";
@@ -86,8 +87,12 @@ export function PartsTable({ parts, compact = false }: { parts: PartsValuation; 
   );
 }
 
+const COLUMN_COUNT = 6;
+
 function PartRow({ part: p, compact }: { part: PartValuation; compact: boolean }) {
+  const [open, setOpen] = useState(false);
   return (
+    <Fragment>
     <tr className={cn(!p.countedInTotal && "opacity-50")}>
       <td className="py-2.5">
         <div className="flex items-center gap-3">
@@ -100,19 +105,21 @@ function PartRow({ part: p, compact }: { part: PartValuation; compact: boolean }
             <div className="text-xs text-fg-subtle">
               {p.category}
               {!p.countedInTotal ? " · alternate (not in total)" : ""}
-              {p.verified ? " · verified eBay" : ""}
             </div>
           </div>
         </div>
       </td>
-      <td className="py-2.5"><TierBadge tier={p.priceTier} /></td>
+      <td className="py-2.5">{p.live ? <LiveMarketCell live={p.live} open={open} onToggle={() => setOpen((v) => !v)} /> : <TierBadge tier={p.priceTier} />}</td>
       <td className="py-2.5 text-right tabular-nums text-fg-muted">{p.perVehicle}</td>
       <td className="py-2.5 text-right tabular-nums text-fg">{formatCurrency(p.unitPrice)}</td>
       <td className="py-2.5 text-right tabular-nums text-fg-muted">
         {formatPercent(p.sellThrough, { digits: 0 })}
         {p.sellThroughAssumed ? <span title="No sell-through reported; default assumed"> *</span> : null}
+        {p.live && p.live.sellThrough === null && !p.sellThroughAssumed ? <span title="Live sold search unavailable; catalog sell-through"> †</span> : null}
       </td>
       <td className="py-2.5 text-right tabular-nums font-medium text-fg">{formatCurrency(p.expectedValue)}</td>
     </tr>
+    {p.live && open ? <LiveEvidenceRow live={p.live} colSpan={COLUMN_COUNT} /> : null}
+    </Fragment>
   );
 }

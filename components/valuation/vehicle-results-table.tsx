@@ -2,6 +2,7 @@
 
 import { Fragment, useMemo, useState } from "react";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { ValuationReport } from "@/components/valuation/valuation-report";
 import { cn } from "@/lib/utils/cn";
 import { formatCurrency } from "@/lib/utils/format";
@@ -29,11 +30,29 @@ function sortValue(v: VehicleValuation, key: SortKey): string | number {
   }
 }
 
-/** Sortable per-vehicle table; a row expands into the full report. */
-export function VehicleResultsTable({ results }: { results: VehicleValuation[] }) {
+/** Sortable per-vehicle table; a row expands into the full report with an on-demand eBay check. */
+export function VehicleResultsTable({ results: initial, liveAvailable = false }: { results: VehicleValuation[]; liveAvailable?: boolean }) {
   const [sort, setSort] = useState<{ key: SortKey; dir: 1 | -1 }>({ key: "total", dir: -1 });
   const [open, setOpen] = useState<Set<number>>(new Set());
   const [query, setQuery] = useState("");
+  const [overrides, setOverrides] = useState<Map<number, VehicleValuation>>(new Map());
+  const [verifying, setVerifying] = useState<Set<number>>(new Set());
+
+  const results = useMemo(() => initial.map((r, i) => overrides.get(i) ?? r), [initial, overrides]);
+
+  async function verify(i: number) {
+    const r = results[i];
+    setVerifying((s) => new Set(s).add(i));
+    try {
+      const res = await fetch("/api/value/verify", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(r.input) });
+      if (res.ok) {
+        const v = (await res.json()) as VehicleValuation;
+        setOverrides((m) => new Map(m).set(i, v));
+      }
+    } finally {
+      setVerifying((s) => { const n = new Set(s); n.delete(i); return n; });
+    }
+  }
 
   const rows = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -99,12 +118,22 @@ export function VehicleResultsTable({ results }: { results: VehicleValuation[] }
                     <td className="px-3 py-2.5 text-right tabular-nums font-medium text-accent">{formatCurrency(r.totalExpectedUsd)}</td>
                     <td className="px-3 py-2.5 text-right tabular-nums text-fg-muted">{r.parts.coveredTypes}</td>
                     <td className="px-3 py-2.5">
-                      {unmatched ? <Badge tone="warning">No part data</Badge> : r.scrap.profileSource === "heuristic" ? <Badge tone="neutral">Scrap estimated</Badge> : null}
+                      <div className="flex flex-wrap gap-1.5">
+                        {r.verification ? <Badge tone="success">eBay live</Badge> : null}
+                        {unmatched ? <Badge tone="warning">No part data</Badge> : r.scrap.profileSource === "heuristic" ? <Badge tone="neutral">Scrap estimated</Badge> : null}
+                      </div>
                     </td>
                   </tr>
                   {expanded ? (
                     <tr>
                       <td colSpan={COLUMNS.length + 2} className="bg-surface px-4 py-5">
+                        {liveAvailable && !r.verification ? (
+                          <div className="mb-4">
+                            <Button variant="secondary" size="sm" disabled={verifying.has(i)} onClick={(e) => { e.stopPropagation(); void verify(i); }}>
+                              {verifying.has(i) ? "Checking eBay…" : "Check eBay live"}
+                            </Button>
+                          </div>
+                        ) : null}
                         <ValuationReport valuation={r} compact />
                       </td>
                     </tr>

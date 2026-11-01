@@ -27,7 +27,8 @@ describe("modelTokens", () => {
     expect(modelTokens("F-150 XLT SuperCrew 4x4")).toEqual(["F150"]);
     expect(modelTokens("Silverado 1500 LT")).toEqual(["SILVERADO", "1500"]);
     expect(modelTokens("Grand Cherokee Laredo")).toEqual(["GRAND", "CHEROKEE"]);
-    expect(modelTokens("Ram 1500 Big Horn")).toEqual(["1500", "BIG", "HORN"]);
+    expect(modelTokens("Ram 1500 Big Horn")).toEqual(["1500"]);
+    expect(modelTokens("Altima 2.5 S")).toEqual(["ALTIMA", "25"]);
     expect(modelTokens("XLT")).toEqual(["XLT"]);
   });
 });
@@ -60,7 +61,7 @@ describe("matchCatalogModels", () => {
   });
 
   it("falls back to a later token", () => {
-    expect(matchCatalogModels("Ram 1500 Big Horn", [...dodge, "150"], "DODGE")).toEqual({ models: ["1500"], how: "prefix" });
+    expect(matchCatalogModels("Ram 1500 Big Horn", [...dodge, "150"], "DODGE")).toEqual({ models: ["1500"], how: "exact" });
     expect(matchCatalogModels("Sierra 1500", ["1500", "2500", "ACADIA"])).toEqual({ models: ["1500"], how: "token" });
   });
 
