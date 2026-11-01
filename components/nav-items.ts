@@ -10,6 +10,11 @@ export interface NavItem {
 
 export const primaryNavItems: NavItem[] = [
   {
+    label: "Vehicle Value",
+    href: "/value",
+    description: "Year, make, model in; scrap value and the resellable parts worth pulling out.",
+  },
+  {
     label: "Auction Analysis",
     href: "/auctions",
     description: "Upload a Copart or IAA sale list and value every lot against the parts catalog.",
